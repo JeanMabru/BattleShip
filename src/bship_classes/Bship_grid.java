@@ -2,36 +2,47 @@ package bship_classes;
 
 public class Bship_grid {
 
-	private int i_Board_size;
-	private int i_Current_score;
+	private int i_x;
+	private int i_y;
+	private int i_state;
+	
 	
 	public Bship_grid()
 	{
-		i_Board_size = 20;
-		i_Current_score = 0;
+		i_state = 1;		
 	}
 	
-	public Bship_grid(int size, int score)
+	public Bship_grid(int x, int y, int state)
 	{
-		this.i_Board_size = size;
-		this.i_Current_score = score;
+		this.i_x = x;
+		this.i_y = y;
+		this.i_state = state;	
 	}
 
-	public int getI_Board_size() {
-		return i_Board_size;
+	public int getI_x() {
+		return i_x;
 	}
 
-	public void setI_Board_size(int i_Board_size) {
-		this.i_Board_size = i_Board_size;
+	public void setI_x(int i_x) {
+		this.i_x = i_x;
 	}
 
-	public int getI_Current_score() {
-		return i_Current_score;
+	public int getI_y() {
+		return i_y;
 	}
 
-	public void setI_Current_score(int i_Current_score) {
-		this.i_Current_score = i_Current_score;
+	public void setI_y(int i_y) {
+		this.i_y = i_y;
 	}
+
+	public int getI_state() {
+		return i_state;
+	}
+
+	public void setI_state(int i_state) {
+		this.i_state = i_state;
+	}
+	
 	
 	
 }

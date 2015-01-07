@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bship_classes.Bship_grid;
+import bship_classes.Bship_grid_global;
 
 import org.json.simple.JSONObject;
 
@@ -33,7 +33,7 @@ public class Bship_gridServlet extends HttpServlet {
 			throws IOException {
 		
 		//System.out.println("bfdhjrf");
-		Bship_grid player_grid = new Bship_grid();
+		Bship_grid_global player_grid = new Bship_grid_global();
 		player_grid.setI_Board_size(20);
 		
 		resp.setContentType("application/json");

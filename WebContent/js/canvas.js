@@ -3,13 +3,12 @@ var i_case_size = 35;
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-window.addEventListener('mousedown', alert_pos, false);
-window.addEventListener('mousedown', getMousePos, false);
+window.addEventListener('click', alert_pos, false);
+window.addEventListener('click', getMousePos, false);
 
-// width="500" height="500"
-//style="border:1px solid #000000;"
+//var Array_grid = new Array();
 
-	
+	//TODO UN ARRAY AVEC TOUTE LES CASES POUR COMPARER LA POSITION
 
 function draw_grid(size)
 {
@@ -47,11 +46,12 @@ function alert_pos(e)
 
 
 
-function getMousePos(evt) {
+function getMousePos(e) {
+	var x, y;
     var rect = canvas.getBoundingClientRect();
     return {
-      x: evt.clientX - rect.left,
-      y: evt.clientY - rect.top
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
     };
 }
 
