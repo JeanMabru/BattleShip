@@ -2,17 +2,19 @@
 var i_case_size = 35;
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+var grid_array = [];
+
 
 window.addEventListener('click', alert_pos, false);
 window.addEventListener('click', getMousePos, false);
+window.addEventListener('click', change_status, false);
 
-//var Array_grid = new Array();
-
-	//TODO UN ARRAY AVEC TOUTE LES CASES POUR COMPARER LA POSITION
-
+//cette fonction trace les bordures et notre tableau et stock toutes les cases dans un array.
+//TODO tout reecrire dans le servlet, pour que les operations se fassent coté server
 function draw_grid(size)
 {
 	var x = 0,y = 0;
+	var i = 0;
 	
 	
 	canvas.width = size*i_case_size;
@@ -31,21 +33,75 @@ function draw_grid(size)
 		ctx.lineTo(canvas.width,y);
 		ctx.stroke();
 	}
-
+		x = 0;
+		y = 0;
+		do{
+			for(x = 0; x < canvas.width; x = x + i_case_size)
+			{
+				var grid_array_case = {x:0, y:0, status:0};
+				grid_array_case.x = x;
+				grid_array_case.y = y;
+				grid_array_case.status = 0;
+				grid_array.push(grid_array_case);
+				//alert("x is equal to " + x);
+				if(x + i_case_size == canvas.width){
+					y = y + i_case_size;
+					//alert("y is equal to " + y);
+				}
+			}
+		}while(y<canvas.width);
+		
+		/*for(i = 0; i < grid_array.length; i++)
+		{
+			alert("Grid " + i + "(x;y;status) is (" + grid_array[i].x + ";" + grid_array[i].y + ";" + grid_array[i].status + ")");			
+		}*/
 }
 
-
+//fonction useless qui affiche en alert la position du clique souris
 function alert_pos(e)
 {
 	var pos = getMousePos(e);
     posx = pos.x;
     posy = pos.y;
-	alert(posx);
-	alert(posy);
+	//alert(posx);
+	//alert(posy);
+}
+
+function change_status(e)
+{
+	grid_array[5].status = 1;
+	grid_array[6].status = 1;
+	grid_array[7].status = 1;
+	grid_array[19].status = 1;
+	grid_array[20].status = 1;
+	
+	var pos = getMousePos(e);
+	posx = pos.x;
+	posy = pos.y;
+	for(i = 0; i < grid_array.length; i++)
+	{
+		//alert("Grid " + i + "(x;y;status) is (" + grid_array[i].x + ";" + grid_array[i].y + ";" + grid_array[i].status + ")");
+		if( (posx > grid_array[i].x) && (posx < grid_array[i].x + i_case_size) && (posy > grid_array[i].y) && (posy < grid_array[i].y + i_case_size) )
+		{
+			ctx.beginPath();
+			ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
+			if(grid_array[i].status == 0)
+			{
+				ctx.fillStyle = "blue";
+			}
+			if(grid_array[i].status == 1)
+			{
+				ctx.fillStyle = "red";
+			}
+			ctx.fill();
+		}
+	}
+
+
 }
 
 
-
+//fonction permettant de recuperer la position du clique souris
 function getMousePos(e) {
 	var x, y;
     var rect = canvas.getBoundingClientRect();
