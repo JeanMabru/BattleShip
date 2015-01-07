@@ -4,6 +4,12 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var grid_array = [];
 
+var img = new Image();
+img.src = "./images/boat1_1.png";
+
+
+
+
 
 window.addEventListener('click', alert_pos, false);
 window.addEventListener('click', getMousePos, false);
@@ -21,13 +27,13 @@ function draw_grid(size)
 	canvas.height = size*i_case_size;
 			
 				
-	for(x = 0; x < canvas.width ; x = x+i_case_size)
+	for(x = 0; x < canvas.width ; x = x + i_case_size)
 	{
 		ctx.moveTo(x,0);
 		ctx.lineTo(x,canvas.width);
 		ctx.stroke();
 	}
-	for(y = 0; y < canvas.width ; y = y+i_case_size)
+	for(y = 0; y < canvas.width ; y = y + i_case_size)
 	{
 		ctx.moveTo(0,y);
 		ctx.lineTo(canvas.width,y);
@@ -41,7 +47,7 @@ function draw_grid(size)
 			var grid_array_case = {x:0, y:0, status:0};
 			grid_array_case.x = x;
 			grid_array_case.y = y;
-			grid_array_case.status = 0;
+			grid_array_case.status = 1;
 			grid_array.push(grid_array_case);
 			//alert("x is equal to " + x);
 			if(x + i_case_size == canvas.width){
@@ -56,6 +62,25 @@ function draw_grid(size)
 			alert("Grid " + i + "(x;y;status) is (" + grid_array[i].x + ";" + grid_array[i].y + ";" + grid_array[i].status + ")");			
 		}*/
 }
+
+//function for the boats, draws the colomns inside the boxes
+function draw_col(input_canvas)
+{
+	//alert(input_canvas);
+	var canvas_inter = document.getElementById(input_canvas);
+	var ctx_inter = canvas_inter.getContext("2d");
+	
+	//alert(canvas_inter);
+	var x = 0;
+	for(x = 0; x < canvas_inter.width ; x = x + i_case_size)
+	{
+		ctx_inter.moveTo(x,0);
+		ctx_inter.lineTo(x,canvas_inter.width);
+		ctx_inter.stroke();
+	}
+}
+
+
 
 //fonction useless qui affiche en alert la position du clique souris
 function alert_pos(e)
@@ -85,15 +110,18 @@ function change_status(e)
 		{
 			ctx.beginPath();
 			ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
-			if(grid_array[i].status == 0)
-			{
-				ctx.fillStyle = "blue";
-			}
 			if(grid_array[i].status == 1)
 			{
+				grid_array[i].status = 2
+				ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
+				//ctx.fillStyle = "blue";
+			}
+			if(grid_array[i].status == 3)
+			{
+				grid_array[i].status = 4;
 				ctx.fillStyle = "red";
 			}
-			ctx.fill();
+			//ctx.fill();
 		}
 	}
 	//on envoie notre array au servlet en JSON. 
@@ -116,7 +144,6 @@ function change_status(e)
 		gr.JSONstatus = grid_array[i].status;
 		grid_JSON.push(gr);
 	}
-	
 	
 	$.post("bsg",
 		{
