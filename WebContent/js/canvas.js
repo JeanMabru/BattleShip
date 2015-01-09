@@ -4,9 +4,12 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var grid_array = [];
 
-var img = new Image();
-img.src = "./images/boat1_1.png";
-
+var img1 = new Image();
+var img2 = new Image();
+var img3 = new Image();
+img1.src = "./images/boat1_1.png";
+img2.src = "./images/boat1_2.png";
+img3.src = "./images/boat1_3.png";
 
 
 
@@ -70,10 +73,28 @@ function draw_col(input_canvas)
 	var x = 0;
 	for(x = 0; x < canvas_inter.width ; x = x + i_case_size)
 	{
-		ctx_inter.moveTo(x,0);
+		/*ctx_inter.moveTo(x,0);
 		ctx_inter.lineTo(x,canvas_inter.width);
-		ctx_inter.stroke();
+		ctx_inter.stroke();*/
+		ctx_inter.rect(x, 0, i_case_size, i_case_size);
+		if(x == 0)
+		{
+			ctx_inter.drawImage(img1,x,0);
+		}
+		if(x > 0 && x + i_case_size < canvas_inter.width)
+		{
+			ctx_inter.drawImage(img2,x,0);
+		}
+		if(x + i_case_size == canvas_inter.width)
+		{
+			ctx_inter.drawImage(img3,x,0);
+		}
+		
 	}
+	/*ctx_inter.beginPath();
+	ctx_inter.rect(grid_array[0].x, grid_array[0].y, i_case_size, i_case_size);
+	ctx_inter.drawImage(img,grid_array[0].x,grid_array[0].y);*/
+	
 }
 
 
@@ -136,15 +157,15 @@ function change_status(e)
 			if(grid_array[i].status == 1)
 			{
 				grid_array[i].status = 2
-				ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
-				//ctx.fillStyle = "blue";
+				//ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
+				ctx.fillStyle = "blue";
 			}
 			if(grid_array[i].status == 3)
 			{
 				grid_array[i].status = 4;
 				ctx.fillStyle = "red";
 			}
-			//ctx.fill();
+			ctx.fill();
 		}
 	}
 	//on envoie notre array au servlet en JSON. 
