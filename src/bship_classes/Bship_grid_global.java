@@ -1,5 +1,5 @@
 package bship_classes;
-// définit le plateau 
+
 public class Bship_grid_global {
 
 	private int i_Board_size;
