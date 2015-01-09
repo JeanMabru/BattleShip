@@ -41,13 +41,16 @@ function draw_grid(size)
 	}
 	x = 0;
 	y = 0;
+	i = 0;
 	do{
 		for(x = 0; x < canvas.width; x = x + i_case_size)
 		{
-			var grid_array_case = {x:0, y:0, status:0};
+			var grid_array_case = {id:0, x:0, y:0, status:0};
+			grid_array_case.id = i;
 			grid_array_case.x = x;
 			grid_array_case.y = y;
 			grid_array_case.status = 1;
+			i++;
 			grid_array.push(grid_array_case);
 			//alert("x is equal to " + x);
 			if(x + i_case_size == canvas.width){
@@ -56,21 +59,14 @@ function draw_grid(size)
 			}
 		}
 	}while(y<canvas.width);
-					
-		/*for(i = 0; i < grid_array.length; i++)
-		{
-			alert("Grid " + i + "(x;y;status) is (" + grid_array[i].x + ";" + grid_array[i].y + ";" + grid_array[i].status + ")");			
-		}*/
 }
 
 //function for the boats, draws the colomns inside the boxes
 function draw_col(input_canvas)
 {
-	//alert(input_canvas);
 	var canvas_inter = document.getElementById(input_canvas);
 	var ctx_inter = canvas_inter.getContext("2d");
 	
-	//alert(canvas_inter);
 	var x = 0;
 	for(x = 0; x < canvas_inter.width ; x = x + i_case_size)
 	{
@@ -105,9 +101,36 @@ function change_status(e)
 	posy = pos.y;
 	for(i = 0; i < grid_array.length; i++)
 	{
-		//alert("Grid " + i + "(x;y;status) is (" + grid_array[i].x + ";" + grid_array[i].y + ";" + grid_array[i].status + ")");
 		if( (posx > grid_array[i].x) && (posx < grid_array[i].x + i_case_size) && (posy > grid_array[i].y) && (posy < grid_array[i].y + i_case_size) )
 		{
+			//alert("la case modif est la : " + grid_array[i].id);
+			
+			//envoie de la case modifié uniquement au servlet en JSON
+			var grid_JSON = [];
+			function func_grid_JSON()
+			{
+				return{
+					JSONid:"",
+					JSONx:"",
+					JSONy:"",
+					JSONstatus:"",
+				}
+			};
+			
+			var gr = func_grid_JSON();
+			
+			gr.JSONid = grid_array[i].id;
+			gr.JSONx = grid_array[i].x;
+			gr.JSONy = grid_array[i].y;
+			gr.JSONstatus = grid_array[i].status;
+			grid_JSON.push(gr);
+			
+			$.post("bsg",
+					{
+						grid: JSON.stringify(grid_JSON),
+					});			
+			
+			
 			ctx.beginPath();
 			ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
 			if(grid_array[i].status == 1)
@@ -126,10 +149,11 @@ function change_status(e)
 	}
 	//on envoie notre array au servlet en JSON. 
 	//on adapte le format de l'array pour que le stringify fonctionne
-	var grid_JSON = [];
+	/*var grid_JSON = [];
 	function func_grid_JSON()
 	{
 		return{
+			JSONid:"",
 			JSONx:"",
 			JSONy:"",
 			JSONstatus:"",
@@ -139,6 +163,7 @@ function change_status(e)
 	{
 		var gr = func_grid_JSON();
 		
+		gr.JSONid = grid_array[i].id;
 		gr.JSONx = grid_array[i].x;
 		gr.JSONy = grid_array[i].y;
 		gr.JSONstatus = grid_array[i].status;
@@ -149,9 +174,7 @@ function change_status(e)
 		{
 			grid: JSON.stringify(grid_JSON),
 		});
-			
-	
-	
+		*/
 }
 
 
