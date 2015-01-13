@@ -150,13 +150,13 @@ function change_status(e)
 			
 			ctx.beginPath();
 			ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
-			if(grid_array[i].status == 1)
+			if(grid_array[i].status == 1 || grid_array[i].status == 2)
 			{
 				grid_array[i].status = 2
 				//ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
 				ctx.fillStyle = "blue";
 			}
-			if(grid_array[i].status == 3)
+			if(grid_array[i].status == 3 || grid_array[i].status == 4)
 			{
 				grid_array[i].status = 4;
 				ctx.fillStyle = "red";
@@ -209,6 +209,7 @@ function getMousePos(e) {
 function place_ship(ship_id, ship_num)
 {
 	var horizontal = true;
+	var div = document.getElementById("formulaire_ship_"+ship_id+"_"+ship_num);
 	
 		//le bateau sera t-il placé horizontalement (bateau taille 2,4 et 5)
 		if(document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_1').checked) {
@@ -223,7 +224,7 @@ function place_ship(ship_id, ship_num)
 
 		var x = grid_array[placage].x;
 		var y = grid_array[placage].y;
-		var i;
+		var i,j;
 		if(horizontal == true)
 		{
 			for(i = 0; i < ship_id ; i++)
@@ -231,14 +232,35 @@ function place_ship(ship_id, ship_num)
 				if(i == 0)
 				{
 					ctx.drawImage(img1,x + i*i_case_size, y);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 				if(i > 0 && i < ship_id)
 				{
 					ctx.drawImage(img2,x + i*i_case_size, y);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 				if(i + 1 == ship_id)
 				{
 					ctx.drawImage(img3,x + i*i_case_size, y);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 			}
 		}
@@ -248,18 +270,40 @@ function place_ship(ship_id, ship_num)
 				if(i == 0)
 				{
 					ctx.drawImage(img1,x, y + i*i_case_size);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 				if(i > 0 && i < ship_id)
 				{
 					ctx.drawImage(img2,x, y + i*i_case_size);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 				if(i + 1 == ship_id)
 				{
 					ctx.drawImage(img3,x, y + i*i_case_size);
+					for(j = 0; j < grid_array.length; j++)
+					{
+						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						{
+							grid_array[j].status = 3;
+						}
+					}
 				}
 			}
 			
 		}
+		div.innerHTML = null;		
 }
 
 function place_ship_position(html_elem_id)
@@ -286,9 +330,7 @@ function place_ship_position(html_elem_id)
 		i = 0;
 		y = y + i_case_size;
 		
-	}while(y < canvas.width);
-	
-	
+	}while(y < canvas.width);	
 }
 
 
