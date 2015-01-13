@@ -65,7 +65,7 @@ function draw_grid(size)
 }
 
 //function for the boats, draws the colomns inside the boxes
-function draw_col(input_canvas)
+function draw_ship_col(input_canvas)
 {
 	var canvas_inter = document.getElementById(input_canvas);
 	var ctx_inter = canvas_inter.getContext("2d");
@@ -73,10 +73,7 @@ function draw_col(input_canvas)
 	var x = 0;
 	for(x = 0; x < canvas_inter.width ; x = x + i_case_size)
 	{
-		/*ctx_inter.moveTo(x,0);
-		ctx_inter.lineTo(x,canvas_inter.width);
-		ctx_inter.stroke();*/
-		ctx_inter.rect(x, 0, i_case_size, i_case_size);
+		//ctx_inter.rect(x, 0, i_case_size, i_case_size);
 		if(x == 0)
 		{
 			ctx_inter.drawImage(img1,x,0);
@@ -94,7 +91,6 @@ function draw_col(input_canvas)
 	/*ctx_inter.beginPath();
 	ctx_inter.rect(grid_array[0].x, grid_array[0].y, i_case_size, i_case_size);
 	ctx_inter.drawImage(img,grid_array[0].x,grid_array[0].y);*/
-	
 }
 
 
@@ -208,4 +204,91 @@ function getMousePos(e) {
       y: e.clientY - rect.top
     };
 }
+
+
+function place_ship(ship_id, ship_num)
+{
+	var horizontal = true;
+	
+		//le bateau sera t-il placé horizontalement (bateau taille 2,4 et 5)
+		if(document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_1').checked) {
+			horizontal = true;
+		}
+		//else -> si pas horizontal => vertical forcement
+		else{
+			horizontal = false;
+		}	
+		var cases = document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_3');
+		var placage = cases.options[cases.selectedIndex].value;
+
+		var x = grid_array[placage].x;
+		var y = grid_array[placage].y;
+		var i;
+		if(horizontal == true)
+		{
+			for(i = 0; i < ship_id ; i++)
+			{
+				if(i == 0)
+				{
+					ctx.drawImage(img1,x + i*i_case_size, y);
+				}
+				if(i > 0 && i < ship_id)
+				{
+					ctx.drawImage(img2,x + i*i_case_size, y);
+				}
+				if(i + 1 == ship_id)
+				{
+					ctx.drawImage(img3,x + i*i_case_size, y);
+				}
+			}
+		}
+		else{
+			for(i = 0; i < ship_id ; i++)
+			{
+				if(i == 0)
+				{
+					ctx.drawImage(img1,x, y + i*i_case_size);
+				}
+				if(i > 0 && i < ship_id)
+				{
+					ctx.drawImage(img2,x, y + i*i_case_size);
+				}
+				if(i + 1 == ship_id)
+				{
+					ctx.drawImage(img3,x, y + i*i_case_size);
+				}
+			}
+			
+		}
+}
+
+function place_ship_position(html_elem_id)
+{
+	var i = 0;
+	var j = 0;
+	var y = 0;
+	var id_case = 0;
+	var Alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+	var div = document.getElementById(html_elem_id);
+	
+	
+	do{
+		for(x = 0; x < canvas.width ; x = x + i_case_size)
+		{
+			
+			div.innerHTML = div.innerHTML + "<option value='"+id_case+"'>"+Alph[j]+(i+1)+"</option>";
+			//alert("<option value='"+id_case+"'>"+Alph[j]+(i+1)+"</option>");
+			i++;
+			id_case++;
+			
+		}
+		j++;
+		i = 0;
+		y = y + i_case_size;
+		
+	}while(y < canvas.width);
+	
+	
+}
+
 
