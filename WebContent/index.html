@@ -3,120 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="css/canvas.css" type="text/css">
 </head>
-<body onload="draw_grid(10), draw_ship_col('boat5'), draw_ship_col('boat4'), draw_ship_col('boat3_1'), draw_ship_col('boat3_2'), draw_ship_col('boat2'), place_ship_position('place_ship_5_1_3'),place_ship_position('place_ship_4_1_3'),place_ship_position('place_ship_3_1_3'),place_ship_position('place_ship_3_2_3'),place_ship_position('place_ship_2_1_3')">
+<body onload="draw_grid(10), draw_grid_outlines(10), draw_ship_col('boat5'), draw_ship_col('boat4'), draw_ship_col('boat3_1'), draw_ship_col('boat3_2'), draw_ship_col('boat2'), place_ship_position('place_ship_5_1_3'),place_ship_position('place_ship_4_1_3'),place_ship_position('place_ship_3_1_3'),place_ship_position('place_ship_3_2_3'),place_ship_position('place_ship_2_1_3')">
 
 
-<div id="bship_grid">
+<div id="wrapper">
+	<div>
+		<canvas id="ligne_chiffre" style="border:1px solid #000000;">
+		</canvas> 
+	</div>
 	
-	<canvas id="myCanvas" style="border:1px solid #000000;" onclick="javascript:change_status()">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<br/>
-<div id="boat_life_5">
-	<canvas id="boat5" style="border:1px solid #000000;" width="175" height="35">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<div id="formulaire_ship_5_1">
-	<input id="place_ship_5_1_1" type="radio" name="q5" value="h5" checked="checked"> Horizontal
-	<input id="place_ship_5_1_2" type="radio" name="q5" value="v5"> Vertical	
-	&nbsp;
-	&nbsp;
-	&nbsp;
-	Position: 
-	<select id="place_ship_5_1_3">
-	    <option value="0">A1</option>
-	    <option value="1">A2</option>
-	    <option value="2">A3</option>
-	    <option value="3">A4</option>
-	</select> 
-	<input type="button" value="Place ship" onclick="javascript:place_ship('5','1')">
-</div>
+	<div>
+		<canvas id="colomn_letter" style="border:1px solid #000000;">
+		</canvas> 
+	</div>
+	
+	<div id="bship_grid">
+		<canvas id="myCanvas" style="border:1px solid #000000;" onclick="javascript:change_status()">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<br/>
 
-<div id="boat_life_4">
-	<canvas id="boat4" style="border:1px solid #000000;" width="140" height="35">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<div id="formulaire_ship_4_1">
-	<input id="place_ship_4_1_1" type="radio" name="q4" value="h4" checked="checked"> Horizontal
-	<input id="place_ship_4_1_2" type="radio" name="q4" value="v4"> Vertical
-	&nbsp;
-	&nbsp;
-	&nbsp;
-	Position: 
-	<select id="place_ship_4_1_3">
-	    <option value="0">A1</option>
-	    <option value="1">A2</option>
-	    <option value="2">A3</option>
-	    <option value="3">A4</option>
-	</select> 
-	<input type="button" value="Place ship" onclick="javascript:place_ship('4','1')">
-</div>
-
-<div id="boat_life_3_1">
-	<canvas id="boat3_1" style="border:1px solid #000000;" width="105" height="35">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<div id="formulaire_ship_3_1">
-	<input id="place_ship_3_1_1" type="radio" name="q3_1" value="h3_1" checked="checked"> Horizontal
-	<input id="place_ship_3_1_2" type="radio" name="q3_1" value="v3_1"> Vertical
-	&nbsp;
-	&nbsp;
-	&nbsp;
-	Position: 
-	<select id="place_ship_3_1_3">
-	    <option value="0">A1</option>
-	    <option value="1">A2</option>
-	    <option value="2">A3</option>
-	    <option value="3">A4</option>
-	</select> 
-	<input type="button" value="Place ship" onclick="javascript:place_ship('3','1')">
-</div>
-
-<div id="boat_life_3_2">
-	<canvas id="boat3_2" style="border:1px solid #000000;" width="105" height="35">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<div id="formulaire_ship_3_2">
-	<input id="place_ship_3_2_1" type="radio" name="q3_2" value="h3_2" checked="checked"> Horizontal
-	<input id="place_ship_3_2_2" type="radio" name="q3_2" value="v3_2"> Vertical
-	&nbsp;
-	&nbsp;
-	&nbsp;
-	Position: 
-	<select id="place_ship_3_2_3">
-	    <option value="0">A1</option>
-	    <option value="1">A2</option>
-	    <option value="2">A3</option>
-	    <option value="3">A4</option>
-	</select> 
-	<input type="button" value="Place ship" onclick="javascript:place_ship('3','2')">
-</div>
-
-<div id="boat_life_2">
-	<canvas id="boat2" style="border:1px solid #000000;" width="70" height="35">
-	Your browser does not support the HTML5 canvas tag.
-	</canvas>
-</div>
-<div id="formulaire_ship_2_1">
-	<input id="place_ship_2_1_1" type="radio" name="q2" value="h2" checked="checked"> Horizontal
-	<input id="place_ship_2_1_2" type="radio" name="q2" value="v2"> Vertical
-	&nbsp;
-	&nbsp;
-	&nbsp;
-	Position: 
-	<select id="place_ship_2_1_3">
-	    <option value="0">A1</option>
-	    <option value="1">A2</option>
-	    <option value="2">A3</option>
-	    <option value="3">A4</option>
-	</select> 
-	<input type="button" value="Place ship" onclick="javascript:place_ship('2','1')">
+	
+<!-- <div id="boat_block">	 -->
+	<div id="boat_life_5">
+		<canvas id="boat5" style="border:1px solid #000000;" width="175" height="35">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<div id="formulaire_ship_5_1">
+		<input id="place_ship_5_1_1" type="radio" name="q5" value="h5" checked="checked"> Horizontal
+		<input id="place_ship_5_1_2" type="radio" name="q5" value="v5"> Vertical	
+		&nbsp;
+		&nbsp;
+		&nbsp;
+		Position: 
+		<select id="place_ship_5_1_3">
+		    <option value="0">A1</option>
+		    <option value="1">A2</option>
+		    <option value="2">A3</option>
+		    <option value="3">A4</option>
+		</select> 
+		<input type="button" value="Place ship" onclick="javascript:place_ship('5','1','true')">
+	</div>
+	
+	<div id="boat_life_4">
+		<canvas id="boat4" style="border:1px solid #000000;" width="140" height="35">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<div id="formulaire_ship_4_1">
+		<input id="place_ship_4_1_1" type="radio" name="q4" value="h4" checked="checked"> Horizontal
+		<input id="place_ship_4_1_2" type="radio" name="q4" value="v4"> Vertical
+		&nbsp;
+		&nbsp;
+		&nbsp;
+		Position: 
+		<select id="place_ship_4_1_3">
+		    <option value="0">A1</option>
+		    <option value="1">A2</option>
+		    <option value="2">A3</option>
+		    <option value="3">A4</option>
+		</select> 
+		<input type="button" value="Place ship" onclick="javascript:place_ship('4','1')">
+	</div>
+	
+	<div id="boat_life_3_1">
+		<canvas id="boat3_1" style="border:1px solid #000000;" width="105" height="35">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<div id="formulaire_ship_3_1">
+		<input id="place_ship_3_1_1" type="radio" name="q3_1" value="h3_1" checked="checked"> Horizontal
+		<input id="place_ship_3_1_2" type="radio" name="q3_1" value="v3_1"> Vertical
+		&nbsp;
+		&nbsp;
+		&nbsp;
+		Position: 
+		<select id="place_ship_3_1_3">
+		    <option value="0">A1</option>
+		    <option value="1">A2</option>
+		    <option value="2">A3</option>
+		    <option value="3">A4</option>
+		</select> 
+		<input type="button" value="Place ship" onclick="javascript:place_ship('3','1')">
+	</div>
+	
+	<div id="boat_life_3_2">
+		<canvas id="boat3_2" style="border:1px solid #000000;" width="105" height="35">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<div id="formulaire_ship_3_2">
+		<input id="place_ship_3_2_1" type="radio" name="q3_2" value="h3_2" checked="checked"> Horizontal
+		<input id="place_ship_3_2_2" type="radio" name="q3_2" value="v3_2"> Vertical
+		&nbsp;
+		&nbsp;
+		&nbsp;
+		Position: 
+		<select id="place_ship_3_2_3">
+		    <option value="0">A1</option>
+		    <option value="1">A2</option>
+		    <option value="2">A3</option>
+		    <option value="3">A4</option>
+		</select> 
+		<input type="button" value="Place ship" onclick="javascript:place_ship('3','2')">
+	</div>
+	
+	<div id="boat_life_2">
+		<canvas id="boat2" style="border:1px solid #000000;" width="70" height="35">
+		Your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+	<div id="formulaire_ship_2_1">
+		<input id="place_ship_2_1_1" type="radio" name="q2" value="h2" checked="checked"> Horizontal
+		<input id="place_ship_2_1_2" type="radio" name="q2" value="v2"> Vertical
+		&nbsp;
+		&nbsp;
+		&nbsp;
+		Position: 
+		<select id="place_ship_2_1_3">
+		    <option value="0">A1</option>
+		    <option value="1">A2</option>
+		    <option value="2">A3</option>
+		    <option value="3">A4</option>
+		</select> 
+		<input type="button" value="Place ship" onclick="javascript:place_ship('2','1')">
+	</div>
 </div>
 
 

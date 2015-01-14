@@ -4,6 +4,12 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var grid_array = [];
 
+var canvas_num = document.getElementById("ligne_chiffre");
+var canvas_letters = document.getElementById("colomn_letter");
+var ctx_num = canvas_num.getContext("2d");
+var ctx_letter = canvas_letters.getContext("2d");
+
+
 var img1 = new Image();
 var img2 = new Image();
 var img3 = new Image();
@@ -13,11 +19,12 @@ img3.src = "./images/boat1_3.png";
 
 
 
+canvas.addEventListener('click', alert_pos, false);
+canvas.addEventListener('click', getMousePos, false);
+canvas.addEventListener('click', change_status, false);
 
-window.addEventListener('click', alert_pos, false);
-window.addEventListener('click', getMousePos, false);
-window.addEventListener('click', change_status, false);
-
+var Alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+var Numer = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26"];
 //cette fonction trace les bordures et notre tableau et stock toutes les cases dans un array.
 //TODO tout reecrire dans le servlet, pour que les operations se fassent coté server
 function draw_grid(size)
@@ -63,6 +70,34 @@ function draw_grid(size)
 		}
 	}while(y<canvas.width);
 }
+
+function draw_grid_outlines(size)
+{
+	var i;
+	var j = 0;
+	canvas_num.width = (size+1)*i_case_size;
+	canvas_num.height = i_case_size;
+	canvas_letters.width = i_case_size;
+	canvas_letters.height = size*i_case_size;
+	
+	for(i = i_case_size; i < canvas_num.width; i = i + i_case_size)
+	{
+		ctx_num.font = "20px Arial";
+		//alert(Numer[j]);
+		ctx_num.fillText(Numer[j],i+12,30);
+		j++;
+	}
+	j = 0;
+	for(i = 1; i <= canvas_letters.height; i = i + i_case_size)
+	{
+		ctx_letter.font = "20px Arial";
+		//alert(Numer[j]);
+		ctx_letter.fillText(Alph[j],10,i+23);
+		j++;
+	}
+	
+}
+
 
 //function for the boats, draws the colomns inside the boxes
 function draw_ship_col(input_canvas)
@@ -208,102 +243,215 @@ function getMousePos(e) {
 
 function place_ship(ship_id, ship_num)
 {
-	var horizontal = true;
+	var b_horizontal = true;
 	var div = document.getElementById("formulaire_ship_"+ship_id+"_"+ship_num);
-	
-		//le bateau sera t-il placé horizontalement (bateau taille 2,4 et 5)
-		if(document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_1').checked) {
-			horizontal = true;
-		}
-		//else -> si pas horizontal => vertical forcement
-		else{
-			horizontal = false;
-		}	
-		var cases = document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_3');
-		var placage = cases.options[cases.selectedIndex].value;
+	var b_can_i_place = 0;
 
-		var x = grid_array[placage].x;
-		var y = grid_array[placage].y;
-		var i,j;
-		if(horizontal == true)
+	
+	//le bateau sera t-il placé horizontalement (bateau taille 2,4 et 5)
+	if(document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_1').checked) {
+		b_horizontal = true;
+	}
+	//else -> si pas horizontal => vertical forcement
+	else{
+		b_horizontal = false;
+	}	
+	var cases = document.getElementById('place_ship_'+ship_id+'_'+ship_num+'_3');
+	var placage = cases.options[cases.selectedIndex].value;
+	var x = grid_array[placage].x;
+	var y = grid_array[placage].y;
+	var i,j,k;
+	placage = parseInt(placage);
+	x = parseInt(x);
+	ship_id = parseInt(ship_id);
+	y = parseInt(y);
+	
+
+	//test de si le bateau rentrera sur le tableau
+		//horizontal
+		if(b_horizontal == true)
 		{
-			for(i = 0; i < ship_id ; i++)
+			
+			//DEBUT DES CONDITIONS DE PLACAGE DE BOAT
+			if((x + i_case_size*ship_id) > canvas.width)
 			{
-				if(i == 0)
+				alert("You cannot place your ship here. More space is required");
+				b_can_i_place = 1;
+			}
+			//on test ce if a chaque fois pour eviter les boucles for lorsqu'elles sont inutiles
+			if(b_can_i_place == 0)
+			{
+				//test si la case possede deja un bateau
+				for(k = 0; k < ship_id; k++)
 				{
-					ctx.drawImage(img1,x + i*i_case_size, y);
-					for(j = 0; j < grid_array.length; j++)
+					//si la case choisi possede deja un bateau (comparer en passant par les id marche que pour l'horizontal)
+					if(grid_array[(placage + k)].status == 3)
 					{
-						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+						b_can_i_place = 1;
+						//to show alert only once
+						if(k+1 == ship_id)
 						{
-							grid_array[j].status = 3;
-						}
-					}
-				}
-				if(i > 0 && i < ship_id)
-				{
-					ctx.drawImage(img2,x + i*i_case_size, y);
-					for(j = 0; j < grid_array.length; j++)
-					{
-						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
-						{
-							grid_array[j].status = 3;
-						}
-					}
-				}
-				if(i + 1 == ship_id)
-				{
-					ctx.drawImage(img3,x + i*i_case_size, y);
-					for(j = 0; j < grid_array.length; j++)
-					{
-						if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
-						{
-							grid_array[j].status = 3;
+							alert("The boat you are trying to place would either not fit on the board if you place it here or it's position is already occupied by another boat. Please place it elsewhere.");
 						}
 					}
 				}
 			}
-		}
-		else{
-			for(i = 0; i < ship_id ; i++)
+			if(b_can_i_place == 0)
 			{
-				if(i == 0)
+				//test pour voir si un bateau est trop pres de celui qu l'on veux placer
+				for(k = 0; k < ship_id; k++)
 				{
-					ctx.drawImage(img1,x, y + i*i_case_size);
-					for(j = 0; j < grid_array.length; j++)
+					for(i = 0; i < grid_array.length; i++)
 					{
-						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						if(((grid_array[(placage + k)].y + i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x))
 						{
-							grid_array[j].status = 3;
+							if(grid_array[i].status == 3)
+							{
+								if(k+1 == ship_id)
+								{
+									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
+								}
+								b_can_i_place = 1;
+							}
 						}
-					}
-				}
-				if(i > 0 && i < ship_id)
-				{
-					ctx.drawImage(img2,x, y + i*i_case_size);
-					for(j = 0; j < grid_array.length; j++)
-					{
-						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						if(((grid_array[(placage + k)].y - i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x))
 						{
-							grid_array[j].status = 3;
+							if(grid_array[i].status == 3)
+							{
+								if(k+1 == ship_id)
+								{
+									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
+								}
+								b_can_i_place = 1;
+							}
 						}
-					}
-				}
-				if(i + 1 == ship_id)
-				{
-					ctx.drawImage(img3,x, y + i*i_case_size);
-					for(j = 0; j < grid_array.length; j++)
-					{
-						if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x - i_case_size == grid_array[i].x))
 						{
-							grid_array[j].status = 3;
+							if(grid_array[i].status == 3)
+							{
+								if(k+1 == ship_id)
+								{
+									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
+								}
+								b_can_i_place = 1;
+							}
+						}
+						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x + i_case_size == grid_array[i].x))
+						{
+							if(grid_array[i].status == 3)
+							{
+								if(k+1 == ship_id)
+								{
+									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
+								}
+								b_can_i_place = 1;
+							}
 						}
 					}
 				}
 			}
 			
+			
+			
+			
+					//tte les conditions sont respectés. on place le bateau (horizontal)
+					if(b_can_i_place == 0)
+					{
+						for(i = 0; i < ship_id ; i++)
+						{
+							if(i == 0)
+							{
+								ctx.drawImage(img1,x + i*i_case_size, y);
+								//les 'for' change les status des cases a 3 -> un bateau est present sur la case.
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+							if(i > 0 && i < ship_id)
+							{
+								ctx.drawImage(img2,x + i*i_case_size, y);
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+							if(i + 1 == ship_id)
+							{
+								ctx.drawImage(img3,x + i*i_case_size, y);
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == (x + i*i_case_size)) && (grid_array[j].y == y))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+						}
+						div.innerHTML = null;
+					}
 		}
-		div.innerHTML = null;		
+		//vertical
+		else{
+			if((y + i_case_size*ship_id) > canvas.width)
+			{
+				alert("You cannot place your ship here. More space is required");
+				b_can_i_place = 1;
+			}
+			
+			
+			
+			
+					//tte les conditions sont respectés. on place le bateau (vertical)
+					if(b_can_i_place == 0)
+					{
+						for(i = 0; i < ship_id ; i++)
+						{
+							if(i == 0)
+							{
+								ctx.drawImage(img1,x, y + i*i_case_size);
+								//les 'for' change les status des cases a 3 -> un bateau est present sur la case.
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+							if(i > 0 && i < ship_id)
+							{
+								ctx.drawImage(img2,x, y + i*i_case_size);
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+							if(i + 1 == ship_id)
+							{
+								ctx.drawImage(img3,x, y + i*i_case_size);
+								for(j = 0; j < grid_array.length; j++)
+								{
+									if((grid_array[j].x == x) && (grid_array[j].y == ((y + i*i_case_size))))
+									{
+										grid_array[j].status = 3;
+									}
+								}
+							}
+						}
+						div.innerHTML = null;
+					}
+		}
+	b_can_i_place = 0;
 }
 
 function place_ship_position(html_elem_id)
@@ -312,7 +460,6 @@ function place_ship_position(html_elem_id)
 	var j = 0;
 	var y = 0;
 	var id_case = 0;
-	var Alph = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 	var div = document.getElementById(html_elem_id);
 	
 	

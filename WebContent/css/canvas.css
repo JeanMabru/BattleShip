@@ -1,0 +1,16 @@
+
+#wrapper{
+	position:absolute;
+}
+
+#colomn_letter{
+	float:left;
+}
+/*
+#ligne_chiffre{
+	float:left;
+}*/
+
+#bship_grid{
+	float:left;
+}
