@@ -241,7 +241,7 @@ function getMousePos(e) {
 }
 
 
-function place_ship(ship_id, ship_num)
+function place_ship(ship_id, ship_num, size)
 {
 	var b_horizontal = true;
 	var div = document.getElementById("formulaire_ship_"+ship_id+"_"+ship_num);
@@ -291,7 +291,7 @@ function place_ship(ship_id, ship_num)
 						//to show alert only once
 						if(k+1 == ship_id)
 						{
-							alert("The boat you are trying to place would either not fit on the board if you place it here or it's position is already occupied by another boat. Please place it elsewhere.");
+							alert("The boat you are trying to place has a position that is already occupied by another boat. Please place it elsewhere.");
 						}
 					}
 				}
@@ -303,51 +303,39 @@ function place_ship(ship_id, ship_num)
 				{
 					for(i = 0; i < grid_array.length; i++)
 					{
-						if(((grid_array[(placage + k)].y + i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x))
+						if(((grid_array[(placage + k)].y + i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x) && b_can_i_place == 0)
 						{
 							if(grid_array[i].status == 3)
 							{
-								if(k+1 == ship_id)
-								{
-									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
-								}
 								b_can_i_place = 1;
 							}
 						}
-						if(((grid_array[(placage + k)].y - i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x))
+						if(((grid_array[(placage + k)].y - i_case_size) == grid_array[i].y) && (grid_array[(placage + k)].x == grid_array[i].x) && b_can_i_place == 0)
 						{
 							if(grid_array[i].status == 3)
 							{
-								if(k+1 == ship_id)
-								{
-									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
-								}
 								b_can_i_place = 1;
 							}
 						}
-						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x - i_case_size == grid_array[i].x))
+						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x - i_case_size == grid_array[i].x) && b_can_i_place == 0)
 						{
 							if(grid_array[i].status == 3)
 							{
-								if(k+1 == ship_id)
-								{
-									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
-								}
 								b_can_i_place = 1;
 							}
 						}
-						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x + i_case_size == grid_array[i].x))
+						if(((grid_array[(placage + k)].y) == grid_array[i].y) && (grid_array[(placage + k)].x + i_case_size == grid_array[i].x) && b_can_i_place == 0)
 						{
 							if(grid_array[i].status == 3)
 							{
-								if(k+1 == ship_id)
-								{
-									alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
-								}
 								b_can_i_place = 1;
 							}
 						}
 					}
+				}
+				if(b_can_i_place == 1)
+				{
+					alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
 				}
 			}
 			
@@ -405,6 +393,67 @@ function place_ship(ship_id, ship_num)
 				b_can_i_place = 1;
 			}
 			
+			if(b_can_i_place == 0)
+			{
+				//test si la case possede deja un bateau
+				for(k = 0; k < ship_id; k++)
+				{
+					//alert("valeur: " + grid_array[(placage + k*size)].status);
+					//si la case choisi possede deja un bateau (comparer en passant par les id marche que pour l'horizontal)
+					if(grid_array[(placage + k*size)].status == 3)
+					{
+						b_can_i_place = 1;
+						//to show alert only once
+						if(k+1 == ship_id)
+						{
+							alert("The boat you are trying to place has a position that is already occupied by another boat. Please place it elsewhere.");
+						}
+					}
+				}
+			}
+			if(b_can_i_place == 0)
+			{
+				//test pour voir si un bateau est trop pres de celui qu l'on veux placer
+				for(k = 0; k < ship_id; k++)
+				{
+					for(i = 0; i < grid_array.length; i++)
+					{
+						if(((grid_array[(placage + k*size)].y + i_case_size) == grid_array[i].y) && (grid_array[(placage + k*size)].x == grid_array[i].x) && b_can_i_place == 0)
+						{
+							if(grid_array[i].status == 3)
+							{
+								b_can_i_place = 1;
+							}
+						}
+						if(((grid_array[(placage + k*size)].y - i_case_size) == grid_array[i].y) && (grid_array[(placage + k*size)].x == grid_array[i].x) && b_can_i_place == 0)
+						{
+							//alert("numero1");
+							if(grid_array[i].status == 3)
+							{
+								b_can_i_place = 1;
+							}
+						}
+						if(((grid_array[(placage + k*size)].y) == grid_array[i].y) && (grid_array[(placage + k*size)].x - i_case_size == grid_array[i].x) && b_can_i_place == 0)
+						{
+							if(grid_array[i].status == 3)
+							{
+								b_can_i_place = 1;
+							}
+						}
+						if(((grid_array[(placage + k*size)].y) == grid_array[i].y) && (grid_array[(placage + k*size)].x + i_case_size == grid_array[i].x) && b_can_i_place == 0)
+						{
+							if(grid_array[i].status == 3)
+							{
+								b_can_i_place = 1;
+							}
+						}
+					}
+				}
+				if(b_can_i_place == 1)
+				{
+					alert("The boat you are trying to place would be to close to an existing boat. Please place it elsewhere.");
+				}
+			}
 			
 			
 			
