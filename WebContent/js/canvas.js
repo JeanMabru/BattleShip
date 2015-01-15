@@ -17,9 +17,13 @@ img1.src = "./images/boat1_1.png";
 img2.src = "./images/boat1_2.png";
 img3.src = "./images/boat1_3.png";
 
+var i_game_state = 0;
+var i_num_ship_on_board = 0;
+var i_num_ship_hit = 0;
 
 
-canvas.addEventListener('click', alert_pos, false);
+
+//canvas.addEventListener('click', alert_pos, false);
 canvas.addEventListener('click', getMousePos, false);
 canvas.addEventListener('click', change_status, false);
 
@@ -131,72 +135,87 @@ function draw_ship_col(input_canvas)
 
 
 //fonction useless qui affiche en alert la position du clique souris
-function alert_pos(e)
-{
-	var pos = getMousePos(e);
+//function alert_pos(e)
+//{
+	/*var pos = getMousePos(e);
     posx = pos.x;
     posy = pos.y;
 	//alert(posx);
-	//alert(posy);
-}
+	//alert(posy);*/
+//}
 
 function change_status(e)
 {
-	/*grid_array[5].status = 1;
-	grid_array[6].status = 1;
-	grid_array[7].status = 1;
-	grid_array[19].status = 1;
-	grid_array[20].status = 1;*/
-	
-	var pos = getMousePos(e);
-	posx = pos.x;
-	posy = pos.y;
-	for(i = 0; i < grid_array.length; i++)
+	//if game is started
+	if(i_game_state == 0)
 	{
-		if( (posx > grid_array[i].x) && (posx < grid_array[i].x + i_case_size) && (posy > grid_array[i].y) && (posy < grid_array[i].y + i_case_size) )
+		alert("Please place all of your ships before starting the game");
+	}
+	if(i_game_state == 2)
+	{
+		alert("This game has been won!~")
+	}
+	if(i_game_state == 1)
+	{
+		var pos = getMousePos(e);
+		posx = pos.x;
+		posy = pos.y;
+		for(i = 0; i < grid_array.length; i++)
 		{
-			//alert("la case modif est la : " + grid_array[i].id);
-			
-			//envoie de la case modifié uniquement au servlet en JSON
-			var grid_JSON = [];
-			function func_grid_JSON()
+			if( (posx > grid_array[i].x) && (posx < grid_array[i].x + i_case_size) && (posy > grid_array[i].y) && (posy < grid_array[i].y + i_case_size) )
 			{
-				return{
-					JSONid:"",
-					JSONx:"",
-					JSONy:"",
-					JSONstatus:"",
+				//alert("la case modif est la : " + grid_array[i].id);
+				
+				//envoie de la case modifié uniquement au servlet en JSON
+				var grid_JSON = [];
+				function func_grid_JSON()
+				{
+					return{
+						JSONid:"",
+						JSONx:"",
+						JSONy:"",
+						JSONstatus:"",
+					}
+				};
+				
+				var gr = func_grid_JSON();
+				
+				gr.JSONid = grid_array[i].id;
+				gr.JSONx = grid_array[i].x;
+				gr.JSONy = grid_array[i].y;
+				gr.JSONstatus = grid_array[i].status;
+				grid_JSON.push(gr);
+				
+				$.post("bsg",
+						{
+							grid: JSON.stringify(grid_JSON),
+						});			
+				
+				
+				ctx.beginPath();
+				ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
+				if(grid_array[i].status == 1 || grid_array[i].status == 2)
+				{
+					grid_array[i].status = 2
+					//ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
+					ctx.fillStyle = "blue";
 				}
-			};
-			
-			var gr = func_grid_JSON();
-			
-			gr.JSONid = grid_array[i].id;
-			gr.JSONx = grid_array[i].x;
-			gr.JSONy = grid_array[i].y;
-			gr.JSONstatus = grid_array[i].status;
-			grid_JSON.push(gr);
-			
-			$.post("bsg",
-					{
-						grid: JSON.stringify(grid_JSON),
-					});			
-			
-			
-			ctx.beginPath();
-			ctx.rect(grid_array[i].x, grid_array[i].y, i_case_size, i_case_size);
-			if(grid_array[i].status == 1 || grid_array[i].status == 2)
-			{
-				grid_array[i].status = 2
-				//ctx.drawImage(img,grid_array[i].x,grid_array[i].y);
-				ctx.fillStyle = "blue";
+				if(grid_array[i].status == 3)
+				{
+					i_num_ship_hit++;
+				}
+				if(grid_array[i].status == 3 || grid_array[i].status == 4)
+				{
+					grid_array[i].status = 4;
+					ctx.fillStyle = "red";
+				}
+				ctx.fill();
 			}
-			if(grid_array[i].status == 3 || grid_array[i].status == 4)
-			{
-				grid_array[i].status = 4;
-				ctx.fillStyle = "red";
-			}
-			ctx.fill();
+		}
+		if(i_num_ship_hit == 17)
+		{
+			alert("Victory!~")
+			i_game_state = 2;
 		}
 	}
 	//on envoie notre array au servlet en JSON. 
@@ -382,6 +401,7 @@ function place_ship(ship_id, ship_num, size)
 								}
 							}
 						}
+						i_num_ship_on_board++;
 						div.innerHTML = null;
 					}
 		}
@@ -497,10 +517,15 @@ function place_ship(ship_id, ship_num, size)
 								}
 							}
 						}
+						i_num_ship_on_board++;
 						div.innerHTML = null;
 					}
 		}
 	b_can_i_place = 0;
+	if(i_num_ship_on_board == 5)
+	{
+		i_game_state = 1;
+	}
 }
 
 function place_ship_position(html_elem_id)
@@ -515,7 +540,6 @@ function place_ship_position(html_elem_id)
 	do{
 		for(x = 0; x < canvas.width ; x = x + i_case_size)
 		{
-			
 			div.innerHTML = div.innerHTML + "<option value='"+id_case+"'>"+Alph[j]+(i+1)+"</option>";
 			//alert("<option value='"+id_case+"'>"+Alph[j]+(i+1)+"</option>");
 			i++;
